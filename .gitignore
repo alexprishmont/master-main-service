@@ -1,0 +1,4 @@
+config/local.yaml
+.idea
+*.png
+*.puml
