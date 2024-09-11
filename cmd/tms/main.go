@@ -35,10 +35,15 @@ func main() {
 	tokenLabel := os.Getenv("HSM_TOKEN_LABEL")
 	pin := os.Getenv("HSM_PIN")
 
-	client, _ := mongodb.New(
+	client, err := mongodb.New(
 		os.Getenv("MONGODB_URI"),
 		os.Getenv("MONGODB_DATABASE"),
 	)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(-1)
+	}
 
 	operator := crypto.Operator{
 		Pkcs11Lib:   libPath,
@@ -47,7 +52,7 @@ func main() {
 		MongoClient: client,
 	}
 
-	err := operator.Init()
+	err = operator.Init()
 	if err != nil {
 		log.Error("Softhsm init error", slog.Any("error", err))
 		os.Exit(-1)
